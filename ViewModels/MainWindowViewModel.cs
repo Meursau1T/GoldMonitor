@@ -2,6 +2,6 @@
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Price { get; set; } = "375";
-    public string Points { get; set; } = "3350";
+    public string Price { get; set; } = "0";
+    public string Points { get; set; } = "0";
 }

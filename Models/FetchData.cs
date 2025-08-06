@@ -1,6 +1,19 @@
+using System;
+using GoldMonitor.ViewModels;
+
 public class FetchData
 {
-    public string fetchPoints() {
+    string FetchPoints()
+    {
         return "";
+    }
+    string FetchPrice()
+    {
+        return "";
+    }
+    public void updatePoints(MainWindowViewModel viewModel)
+    {
+        viewModel.Points = FetchPoints();
+        viewModel.Price = FetchPrice();
     }
 }
