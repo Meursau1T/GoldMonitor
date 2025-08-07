@@ -7,12 +7,12 @@ using System.Text.Json;
 
 namespace GoldMonitor.Models;
 
-public class FetchData {
+public static class FetchPoint {
     private struct Message {
         public string Type { get; init; }
         public string Price { get; init; }
     }
-    public delegate void LogDelegate(string content, bool? isPrice = false); 
+    public delegate void UpdaterDelegate(string content, bool? isPoint = false); 
     private static Message ParsePoints(string raw) {
         using var doc = JsonDocument.Parse(raw);
         var root = doc.RootElement;
@@ -26,7 +26,7 @@ public class FetchData {
     private static bool IsGold(Message msg) {
         return msg.Type == "GOLD";
     }
-    private static async Task ReceiveMessages(ClientWebSocket webSocket, LogDelegate log) {
+    private static async Task ReceiveMessages(ClientWebSocket webSocket, UpdaterDelegate updater) {
         var buffer = new byte[1024 * 4];
         while (webSocket.State == WebSocketState.Open)
             try {
@@ -36,40 +36,41 @@ public class FetchData {
                     var rawMsg = Encoding.UTF8.GetString(buffer, 0, result.Count);
                     var msg = ParsePoints(rawMsg);
                     if (IsGold(msg)) {
-                        log(msg.Price, true);
+                        updater(msg.Price, true);
                     }
                 }
                 else if (result.MessageType == WebSocketMessageType.Close) {
-                    log("收到关闭帧。");
+                    updater("收到关闭帧。");
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "收到关闭指令", CancellationToken.None);
                 }
             }
             catch (OperationCanceledException) {
-                log("接收操作被取消。");
+                updater("接收操作被取消。");
                 break;
             }
             catch (Exception ex) {
-                log($"接收消息出错: {ex.Message}");
+                updater($"接收消息出错: {ex.Message}");
                 break;
             }
     }
 
-    public async Task FetchPoints(LogDelegate log) {
+    public static async Task UpdatePoints(UpdaterDelegate updater) {
         var clientWebSocket = new ClientWebSocket();
+        /* 万洲黄金 */
         var uri = new Uri("wss://alb-8yr5quj236kibwg1zd.cn-shenzhen.alb.aliyuncs.com:9701/");
 
         try {
-            log("正在连接到 WebSocket 服务器...");
+            updater("正在连接到 WebSocket 服务器...");
             await clientWebSocket.ConnectAsync(uri, CancellationToken.None);
-            log("连接成功！");
+            updater("连接成功！");
 
             // 启动接收消息的任务
-            var receiveTask = ReceiveMessages(clientWebSocket, log);
+            var receiveTask = ReceiveMessages(clientWebSocket, updater);
             // 等待接收任务（可以一直运行）
             await receiveTask;
         }
         catch (Exception ex) {
-            log($"发生错误: {ex.Message}");
+            updater($"发生错误: {ex.Message}");
         }
         finally {
             if (clientWebSocket.State == WebSocketState.Open ||
@@ -77,12 +78,7 @@ public class FetchData {
                 clientWebSocket.State == WebSocketState.CloseSent)
                 await clientWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "关闭连接", CancellationToken.None);
             clientWebSocket.Dispose();
-            log("WebSocket 已关闭。");
+            updater("WebSocket 已关闭。");
         }
-    }
-
-    public static string FetchPrice() {
-        Console.WriteLine("HELLO WORLD");
-        return "HELLO WORLD";
     }
 }

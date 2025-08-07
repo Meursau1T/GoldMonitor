@@ -23,21 +23,32 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         }
     }
     public MainWindowViewModel() {
-        UpdateValue();
+        UpdatePoint();
+        UpdatePrice();
     }
-    private async Task UpdateValue() {
-        void Log(string content, bool? isPrice = false) {
+    private async Task UpdatePoint() {
+        void Callback(string content, bool? isPrice = false) {
             if (isPrice ?? false) {
-                Price = content;
-                Console.WriteLine($"update {content}");
+                Points = content;
+                // Console.WriteLine($"update {content}");
             }
             else {
-                Console.WriteLine(content);
+                // Console.WriteLine(content);
             }
         }
-        Console.WriteLine("Start Fetching");
-        var fetcher = new FetchData();
-        await fetcher.FetchPoints(Log);
+        await FetchPoint.UpdatePoints(Callback);
+    }
+    private async Task UpdatePrice() {
+        void Callback(string content, bool? isPrice = false) {
+            if (isPrice ?? false) {
+                Price = content;
+                // Console.WriteLine($"update {content}");
+            }
+            else {
+                // Console.WriteLine(content);
+            }
+        }
+        await FetchPrice.UpdatePrice(Callback);
     }
     
     public event PropertyChangedEventHandler PropertyChanged;
