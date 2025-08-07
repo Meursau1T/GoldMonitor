@@ -1,56 +1,56 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using GoldMonitor.Models;
+using GoldMonitor.Helpers;
 
 namespace GoldMonitor.ViewModels;
 
 public class MainWindowViewModel : INotifyPropertyChanged {
-    private string price = "0";
+    private string _price = "0";
     public string Price {
-        get => price;
+        get => _price;
         set {
-            price = value;
+            _price = value;
             OnPropertyChanged(nameof(Price));
         }
     }
-    private string points = "0";
-    public string Points {
-        get => points;
+    private string _rate = "0";
+    public string Rate {
+        get => _rate;
         set {
-            points = value;
-            OnPropertyChanged(nameof(Points));
+            _rate = value;
+            OnPropertyChanged(nameof(Rate));
         }
     }
+
+    private string _locale = "CN";
+
+    public string Locale {
+        get => _locale;
+        set {
+            _locale = value;
+            OnPropertyChanged(nameof(Locale));
+        }
+    }
+    private GoldPrice _goldPrice;
+
     public MainWindowViewModel() {
-        UpdatePoint();
-        UpdatePrice();
+        _goldPrice = new GoldPrice(
+            onPriceChange: (str) => Price = str,
+            onRateChange: (str) => Rate = str + "%"
+            );
+        _goldPrice.GetVal();
     }
-    private async Task UpdatePoint() {
-        void Callback(string content, bool? isPrice = false) {
-            if (isPrice ?? false) {
-                Points = content;
-                // Console.WriteLine($"update {content}");
-            }
-            else {
-                // Console.WriteLine(content);
-            }
+
+    public void ChangeCurrency() {
+        if (Locale != "EN") { 
+            _goldPrice.UpdateLocale(GoldPrice.Currency.USD, GoldPrice.Unit.OZ);
+            Locale = "EN";
+        } else {
+            _goldPrice.UpdateLocale(GoldPrice.Currency.CNY, GoldPrice.Unit.G);
+            Locale = "CN";
         }
-        await FetchPoint.UpdatePoints(Callback);
     }
-    private async Task UpdatePrice() {
-        void Callback(string content, bool? isPrice = false) {
-            if (isPrice ?? false) {
-                Price = content;
-                // Console.WriteLine($"update {content}");
-            }
-            else {
-                // Console.WriteLine(content);
-            }
-        }
-        await FetchPrice.UpdatePrice(Callback);
-    }
-    
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)

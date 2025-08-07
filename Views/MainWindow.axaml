@@ -3,6 +3,7 @@
         xmlns:vm="using:GoldMonitor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:GoldMonitor.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="GoldMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -14,12 +15,31 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
+    <Window.Resources>
+        <converters:TextToBrushConverter x:Key="TextToBrushConverter"/>
+    </Window.Resources>
 
-    <ContentControl>
-        <StackPanel>
-            <TextBlock Text="{Binding Price}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBlock Text="{Binding Points}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <Button Content="Hello" />
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+        
+        <!-- 第一行：两个 TextBlock 并排 -->
+        <DockPanel LastChildFill="False" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <TextBlock Text="{Binding Price}"
+                       FontWeight="Bold"
+                       FontSize="48"
+                       Margin="0,0,20,0"
+                       VerticalAlignment="Center"/>
+
+            <TextBlock Text="{Binding Rate}"
+                       Foreground="{Binding Rate, Converter={StaticResource TextToBrushConverter}}"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       VerticalAlignment="Center"/>
+        </DockPanel>
+
+        <!-- 第二行：两个按钮，并排居中 -->
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+            <Button Content="{Binding Locale}" MinWidth="100" Command="{Binding ChangeCurrency}"/>
+            <Button Content="低点提醒" MinWidth="100" />
         </StackPanel>
-    </ContentControl>
+    </StackPanel>
 </Window>
