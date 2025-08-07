@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GoldMonitor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+622e9ffb3889b95a021e93e9b200e397514741e1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+224d37edbca385adda538151b46fb2163aac65ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("GoldMonitor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GoldMonitor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
