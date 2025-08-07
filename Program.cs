@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Logging;
 using System;
 
 namespace GoldMonitor;
@@ -17,5 +18,5 @@ sealed class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace(LogEventLevel.Verbose);
 }

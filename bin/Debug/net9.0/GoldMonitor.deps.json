@@ -13,7 +13,8 @@
           "Avalonia.Diagnostics": "11.3.3",
           "Avalonia.Fonts.Inter": "11.3.3",
           "Avalonia.Themes.Fluent": "11.3.3",
-          "CommunityToolkit.Mvvm": "8.2.1"
+          "CommunityToolkit.Mvvm": "8.2.1",
+          "HtmlAgilityPack": "1.12.2"
         },
         "runtime": {
           "GoldMonitor.dll": {}
@@ -357,6 +358,14 @@
           }
         }
       },
+      "HtmlAgilityPack/1.12.2": {
+        "runtime": {
+          "lib/net7.0/HtmlAgilityPack.dll": {
+            "assemblyVersion": "1.12.2.0",
+            "fileVersion": "1.12.2.0"
+          }
+        }
+      },
       "MicroCom.Runtime/0.11.0": {
         "runtime": {
           "lib/net5.0/MicroCom.Runtime.dll": {
@@ -599,6 +608,13 @@
       "sha512": "sha512-UsJtQsfAJoFDZrXc4hCUfRPMqccfKZ0iumJ/upcUjz/cmsTgVFGNEL5yaJWmkqsuFYdMWbj/En5/kS4PFl9hBA==",
       "path": "harfbuzzsharp.nativeassets.win32/8.3.1.1",
       "hashPath": "harfbuzzsharp.nativeassets.win32.8.3.1.1.nupkg.sha512"
+    },
+    "HtmlAgilityPack/1.12.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-btF/9sB65h0V9ipZxVfEQ9fxDwXSFRwhi4Z1qFBgnXONqWVKZE3LxS0JEMW73G3gvrFI7/IAqLA1y/15HDa3fw==",
+      "path": "htmlagilitypack/1.12.2",
+      "hashPath": "htmlagilitypack.1.12.2.nupkg.sha512"
     },
     "MicroCom.Runtime/0.11.0": {
       "type": "package",

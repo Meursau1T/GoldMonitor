@@ -72,3 +72,4 @@ c:\Users\Nagato\Sources\GoldMonitor\obj\Debug\net9.0\refint\GoldMonitor.dll
 c:\Users\Nagato\Sources\GoldMonitor\obj\Debug\net9.0\GoldMonitor.pdb
 c:\Users\Nagato\Sources\GoldMonitor\obj\Debug\net9.0\GoldMonitor.genruntimeconfig.cache
 c:\Users\Nagato\Sources\GoldMonitor\obj\Debug\net9.0\ref\GoldMonitor.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Debug\net9.0\HtmlAgilityPack.dll
