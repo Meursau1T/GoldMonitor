@@ -1,37 +1,83 @@
 using System;
-using System.Net.Http;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
+using System.Text.Json;
+
+namespace GoldMonitor.Models;
 
 public class FetchData {
-    private static readonly HttpClient _httpClient = new();
+    private struct Message {
+        public string Type { get; init; }
+        public string Price { get; init; }
+    }
+    public delegate void LogDelegate(string content, bool? isPrice = false); 
+    private static Message ParsePoints(string raw) {
+        using var doc = JsonDocument.Parse(raw);
+        var root = doc.RootElement;
+        var firstItem = root[0]; // 获取第一个元素
+        var val = new Message {
+            Price = firstItem.GetProperty("bid").ToString() ?? "",
+            Type = firstItem.GetProperty("symbol").GetString() ?? "",
+        };
+        return val;
+    }
+    private static bool IsGold(Message msg) {
+        return msg.Type == "GOLD";
+    }
+    private static async Task ReceiveMessages(ClientWebSocket webSocket, LogDelegate log) {
+        var buffer = new byte[1024 * 4];
+        while (webSocket.State == WebSocketState.Open)
+            try {
+                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
-    public static async Task<string> FetchPoints(Action<string> log) {
-        log("hello");
+                if (result.MessageType == WebSocketMessageType.Text) {
+                    var rawMsg = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    var msg = ParsePoints(rawMsg);
+                    if (IsGold(msg)) {
+                        log(msg.Price, true);
+                    }
+                }
+                else if (result.MessageType == WebSocketMessageType.Close) {
+                    log("收到关闭帧。");
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "收到关闭指令", CancellationToken.None);
+                }
+            }
+            catch (OperationCanceledException) {
+                log("接收操作被取消。");
+                break;
+            }
+            catch (Exception ex) {
+                log($"接收消息出错: {ex.Message}");
+                break;
+            }
+    }
+
+    public async Task FetchPoints(LogDelegate log) {
+        var clientWebSocket = new ClientWebSocket();
+        var uri = new Uri("wss://alb-8yr5quj236kibwg1zd.cn-shenzhen.alb.aliyuncs.com:9701/");
+
         try {
-            // 抓取网页内容
-            var url = "https://www.wzg.com/gold/";
-            var htmlContent = await _httpClient.GetStringAsync(url);
+            log("正在连接到 WebSocket 服务器...");
+            await clientWebSocket.ConnectAsync(uri, CancellationToken.None);
+            log("连接成功！");
 
-            // 使用 HtmlAgilityPack 解析 HTML
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(htmlContent);
-
-            // 查找 ID 为 goldprice 的元素
-            var goldPriceElement = htmlDocument.GetElementbyId("goldprice");
-
-            if (goldPriceElement != null) return goldPriceElement.InnerText.Trim();
-
-            log("未找到 ID 为 'goldprice' 的元素");
-            return "未找到 ID 为 'goldprice' 的元素";
-        }
-        catch (HttpRequestException ex) {
-            log($"请求错误: {ex.Message}");
-            return $"请求错误: {ex.Message}";
+            // 启动接收消息的任务
+            var receiveTask = ReceiveMessages(clientWebSocket, log);
+            // 等待接收任务（可以一直运行）
+            await receiveTask;
         }
         catch (Exception ex) {
-            log($"错误: {ex.Message}");
-            return $"发生错误: {ex.Message}";
+            log($"发生错误: {ex.Message}");
+        }
+        finally {
+            if (clientWebSocket.State == WebSocketState.Open ||
+                clientWebSocket.State == WebSocketState.CloseReceived ||
+                clientWebSocket.State == WebSocketState.CloseSent)
+                await clientWebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "关闭连接", CancellationToken.None);
+            clientWebSocket.Dispose();
+            log("WebSocket 已关闭。");
         }
     }
 
