@@ -4,11 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:GoldMonitor.Converters"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100"
         x:Class="GoldMonitor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="GoldMonitor">
+        Title="GoldMonitor"
+        Width="300"
+        Height="200"
+        CanResize="False"
+        SystemDecorations="None"
+        ExtendClientAreaToDecorationsHint="True"
+        Topmost="True"
+        PointerPressed="TitleBar_PointerPressed">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -18,28 +25,45 @@
     <Window.Resources>
         <converters:TextToBrushConverter x:Key="TextToBrushConverter"/>
     </Window.Resources>
+    <Canvas>
 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-        
-        <!-- 第一行：两个 TextBlock 并排 -->
-        <DockPanel LastChildFill="False" HorizontalAlignment="Center" Margin="0,0,0,0">
-            <TextBlock Text="{Binding Price}"
-                       FontWeight="Bold"
-                       FontSize="48"
-                       Margin="0,0,20,0"
-                       VerticalAlignment="Center"/>
+        <Image Source="/Assets/ring.png"
+               Width="16" Height="16"
+               Canvas.Left="6" Canvas.Top="6"
+               Cursor="Hand"/>
 
-            <TextBlock Text="{Binding Rate}"
-                       Foreground="{Binding Rate, Converter={StaticResource TextToBrushConverter}}"
-                       FontWeight="Bold"
-                       FontSize="16"
-                       VerticalAlignment="Center"/>
-        </DockPanel>
+        <Image Source="/Assets/close.png"
+               Width="16" Height="16"
+               Canvas.Left="286" Canvas.Top="6"
+               Cursor="Hand"/>
+        <StackPanel Canvas.Left="100" Canvas.Top="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="20"
+                    RenderTransformOrigin="0.5,0.5">
+            <StackPanel.RenderTransform>
+                <!-- 通过 TranslateTransform 实现真正的居中 -->
+                <TranslateTransform X="-75" Y="-50"/>
+            </StackPanel.RenderTransform>
+            
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,0,0,0">
+                <TextBlock Text="{Binding Price}"
+                           FontWeight="Bold"
+                           FontSize="48"
+                           Margin="0,0,20,0"
+                           VerticalAlignment="Center"/>
 
-        <!-- 第二行：两个按钮，并排居中 -->
-        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-            <Button Content="{Binding Locale}" MinWidth="100" Command="{Binding ChangeCurrency}"/>
-            <Button Content="低点提醒" MinWidth="100" />
+                <TextBlock Text="{Binding Rate}"
+                           Foreground="{Binding Rate, Converter={StaticResource TextToBrushConverter}}"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <Button Content="{Binding Locale}" MinWidth="100" Command="{Binding ChangeCurrency}"/>
+                <Button Content="低点提醒" MinWidth="100" />
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Canvas>
 </Window>
