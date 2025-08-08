@@ -25,18 +25,23 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
     <Window.Resources>
-        <converters:TextToBrushConverter x:Key="TextToBrushConverter"/>
+        <converters:TextToBrushConverter x:Key="TextToBrushConverter" />
     </Window.Resources>
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *, Auto" Margin="10,10,10,10">
-       
-        <StackPanel Orientation="Horizontal" 
-                    Spacing="8"
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Top"
-                    Grid.Row="0" Grid.Column="0">
-   
-            <Image Source="/Assets/ring.png" Width="16" Height="16" Cursor="Hand">
-            </Image>
+
+        <StackPanel
+            Orientation="Horizontal"
+            Spacing="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Grid.Row="0" Grid.Column="0">
+
+            <Image
+                Source="/Assets/ring.png"
+                Width="16"
+                Height="16"
+                Cursor="Hand"
+                PointerPressed="OpenDialog_PointerPressed" />
 
             <Image Source="/Assets/locale.png" Width="16" Height="16" Cursor="Hand">
                 <i:Interaction.Behaviors>
@@ -49,15 +54,13 @@
 
         <!-- 右上角图标: 关闭按钮 -->
         <Image
-            Source="/Assets/close.png" 
-            Width="16" Height="16" 
-            HorizontalAlignment="Right" 
+            Source="/Assets/close.png"
+            Width="16" Height="16"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Grid.Row="0" Grid.Column="2"
             Cursor="Hand"
-            PointerPressed="Close_PointerPressed"
-            >
-        </Image>
+            PointerPressed="Close_PointerPressed" />
 
         <!-- 主内容区域：居中显示 -->
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
@@ -70,13 +73,13 @@
                 <TextBlock Text="{Binding Price}"
                            FontWeight="Bold"
                            FontSize="48"
-                           HorizontalAlignment="Center"/>
-                
+                           HorizontalAlignment="Center" />
+
                 <TextBlock Text="{Binding Rate}"
                            Foreground="{Binding Rate, Converter={StaticResource TextToBrushConverter}}"
                            FontWeight="Bold"
                            FontSize="16"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center" />
             </StackPanel>
         </StackPanel>
     </Grid>

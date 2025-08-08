@@ -1,38 +1,40 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Text.Json;
-using GoldMonitor.Models;
+using System.Threading.Tasks;
 
-namespace GoldMonitor.Helpers;
+namespace GoldMonitor.Models;
 
 public class GoldPrice {
     public enum Currency {
         CNY,
-        USD,
+        USD
     }
+
     public enum Unit {
         OZ,
-        G,
+        G
     }
-    
+
+    private const int Timeout = 5;
+
     private Currency _currCurrency;
     private Unit _currUnit;
     private HttpReq? _fetcher;
-    private const int Timeout = 5;
-    private Action<string> _onRateChange;
-    private Action<string> _onPriceChange;
+    private readonly Action<string> _onPriceChange;
+    private readonly Action<string> _onRateChange;
 
     public GoldPrice(
         Currency? currency = null,
         Unit? unit = null,
         Action<string>? onRateChange = null,
         Action<string>? onPriceChange = null
-        ) {
+    ) {
         _currCurrency = currency ?? Currency.CNY;
         _currUnit = unit ?? Unit.G;
-        _onRateChange = onRateChange ?? ((str) => {});
-        _onPriceChange = onPriceChange ?? (str => {});
+        _onRateChange = onRateChange ?? (str => { });
+        _onPriceChange = onPriceChange ?? (str => { });
     }
+
     public void UpdateLocale(Currency? currency = null, Unit? unit = null) {
         Console.WriteLine($"{currency.ToString()} - {unit}");
         _currCurrency = currency ?? _currCurrency;
@@ -49,13 +51,13 @@ public class GoldPrice {
         }
 
         string Fix2(string str) {
-            if (decimal.TryParse(str, out decimal number)) {
+            if (decimal.TryParse(str, out var number))
                 // 格式化为最多两位小数
                 return number.ToString("F2");
-            } else {
-                return "NaN";
-            }
+
+            return "NaN";
         }
+
         string Parse(string raw) {
             try {
                 /*
@@ -78,14 +80,16 @@ public class GoldPrice {
                     _onRateChange(Fix2(changeRate));
                     return priceRes;
                 }
+
                 return "NaN";
             } catch (Exception e) {
                 Console.WriteLine($"GoldPrice Parse Error: {e.Message}");
                 return "NaN";
             }
         }
+
         _fetcher = new HttpReq(
-            url: $"https://data-asg.goldprice.org/dbXRates/{_currCurrency.ToString()}",
+            $"https://data-asg.goldprice.org/dbXRates/{_currCurrency.ToString()}",
             parser: Parse
         );
         await _fetcher.AutoFetch(Timeout);

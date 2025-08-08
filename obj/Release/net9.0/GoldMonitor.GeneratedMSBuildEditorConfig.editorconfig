@@ -24,5 +24,8 @@ build_property.EnableCodeStyleSeverity =
 [C:/Users/Nagato/Sources/GoldMonitor/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Users/Nagato/Sources/GoldMonitor/Views/DialogView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/Nagato/Sources/GoldMonitor/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

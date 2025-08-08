@@ -3,10 +3,10 @@
 namespace GoldMonitor.Models;
 
 public class WebReq {
-    protected string Url { get; init; }
-    protected readonly Func<string, string> Parser; 
     protected readonly Func<string, bool> Checker;
+    protected readonly Func<string, string> Parser;
     protected readonly Action<string> SuccessCallback;
+
     protected WebReq(
         string url,
         Action<string>? successCallback = null,
@@ -17,4 +17,6 @@ public class WebReq {
         Checker = checker ?? (str => true);
         Parser = parser ?? (str => str);
     }
+
+    protected string Url { get; init; }
 }

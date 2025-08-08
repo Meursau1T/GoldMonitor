@@ -1,10 +1,10 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 
 namespace GoldMonitor.Views;
 
-public partial class MainWindow : Window {
-    public MainWindow() {
+public partial class DialogView : Window {
+    public DialogView() {
         InitializeComponent();
     }
 
@@ -14,11 +14,5 @@ public partial class MainWindow : Window {
 
     private void Close_PointerPressed(object? sender, PointerPressedEventArgs e) {
         if (e.GetCurrentPoint(null).Properties.IsLeftButtonPressed) Close();
-    }
-
-    private void OpenDialog_PointerPressed(object? sender, PointerPressedEventArgs e) {
-        var ownerWindow = this;
-        var window = new DialogView();
-        window.ShowDialog(ownerWindow);
     }
 }
