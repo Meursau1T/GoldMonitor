@@ -6,20 +6,20 @@ using ReactiveUI.Fody.Helpers;
 namespace GoldMonitor.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject {
-    private readonly GoldPrice _goldPrice;
+    private readonly GoldPriceService _goldPriceService;
 
     public MainWindowViewModel() {
         LocalePressed = ReactiveCommand.Create(ChangeCurrency);
-        _goldPrice = new GoldPrice(
+        _goldPriceService = new GoldPriceService(
             onPriceChange: str => Price = str,
             onRateChange: str => Rate = str + "%"
         );
-        _goldPrice.GetVal();
+        _goldPriceService.GetVal();
     }
 
-    [Reactive] public string Price { get; set; } = "";
+    [Reactive] public string Price { get; set; } = "Loading";
 
-    [Reactive] public string Rate { get; set; } = "";
+    [Reactive] public string Rate { get; set; } = "Loading";
 
     [Reactive] public string Locale { get; set; } = "CN";
 
@@ -28,10 +28,10 @@ public class MainWindowViewModel : ReactiveObject {
 
     private void ChangeCurrency() {
         if (Locale != "EN") {
-            _goldPrice.UpdateLocale(GoldPrice.Currency.USD, GoldPrice.Unit.OZ);
+            _goldPriceService.UpdateLocale(GoldPriceService.Currency.USD, GoldPriceService.Unit.OZ);
             Locale = "EN";
         } else {
-            _goldPrice.UpdateLocale(GoldPrice.Currency.CNY, GoldPrice.Unit.G);
+            _goldPriceService.UpdateLocale(GoldPriceService.Currency.CNY, GoldPriceService.Unit.G);
             Locale = "CN";
         }
     }

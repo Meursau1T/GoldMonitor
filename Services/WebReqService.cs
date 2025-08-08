@@ -2,12 +2,12 @@
 
 namespace GoldMonitor.Models;
 
-public class WebReq {
+public class WebReqService {
     protected readonly Func<string, bool> Checker;
     protected readonly Func<string, string> Parser;
     protected readonly Action<string> SuccessCallback;
 
-    protected WebReq(
+    protected WebReqService(
         string url,
         Action<string>? successCallback = null,
         Func<string, string>? parser = null,

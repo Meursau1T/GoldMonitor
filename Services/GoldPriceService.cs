@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace GoldMonitor.Models;
 
-public class GoldPrice {
+public class GoldPriceService {
     public enum Currency {
         CNY,
         USD
@@ -19,11 +19,11 @@ public class GoldPrice {
 
     private Currency _currCurrency;
     private Unit _currUnit;
-    private HttpReq? _fetcher;
+    private HttpReqService? _fetcher;
     private readonly Action<string> _onPriceChange;
     private readonly Action<string> _onRateChange;
 
-    public GoldPrice(
+    public GoldPriceService(
         Currency? currency = null,
         Unit? unit = null,
         Action<string>? onRateChange = null,
@@ -88,7 +88,7 @@ public class GoldPrice {
             }
         }
 
-        _fetcher = new HttpReq(
+        _fetcher = new HttpReqService(
             $"https://data-asg.goldprice.org/dbXRates/{_currCurrency.ToString()}",
             parser: Parse
         );

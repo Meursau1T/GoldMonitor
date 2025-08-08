@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GoldMonitor.Models;
 
-public class WsReq : WebReq {
-    public WsReq(string url,
+public class WsReqService : WebReqService {
+    public WsReqService(string url,
         Action<string>? successCallback = null,
         Func<string, string>? parser = null,
         Func<string, bool>? checker = null) : base(url, successCallback, parser, checker) {

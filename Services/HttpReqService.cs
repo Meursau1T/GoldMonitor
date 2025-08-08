@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace GoldMonitor.Models;
 
-public class HttpReq : WebReq {
+public class HttpReqService : WebReqService {
     private bool _isAutoFetchCanceled;
     private readonly Action<HttpClient>? ConfigHttpClient;
 
-    public HttpReq(
+    public HttpReqService(
         string url,
         Action<string>? successCallback = null,
         Func<string, string>? parser = null,
