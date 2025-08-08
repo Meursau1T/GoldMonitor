@@ -2,55 +2,38 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using GoldMonitor.Common;
+using GoldMonitor.Models;
 
-namespace GoldMonitor.Models;
+namespace GoldMonitor.Services;
 
-public class GoldPriceService {
+public class GoldPriceService() {
 
     private const int Timeout = 5;
 
-    private GoldProperty.Currency _currCurrency;
-    private GoldProperty.Unit _currUnit;
-    private HttpReqService? _fetcher;
-    private readonly Action<string> _onPriceChange;
-    private readonly Action<string> _onRateChange;
-
-    public GoldPriceService(
-        GoldProperty.Currency? currency = null,
-        GoldProperty.Unit? unit = null,
-        Action<string>? onRateChange = null,
-        Action<string>? onPriceChange = null
-    ) {
-        _currCurrency = currency ?? GoldProperty.Currency.CNY;
-        _currUnit = unit ?? GoldProperty.Unit.G;
-        _onRateChange = onRateChange ?? (str => { });
-        _onPriceChange = onPriceChange ?? (str => { });
-    }
-
-    public void UpdateLocale(GoldProperty.Currency? currency = null, GoldProperty.Unit? unit = null) {
-        Console.WriteLine($"{currency.ToString()} - {unit}");
-        _currCurrency = currency ?? _currCurrency;
-        _currUnit = unit ?? _currUnit;
-        _fetcher.StopAutoFetch();
-        _fetcher = null;
-        GetVal();
-    }
-
-    public async Task GetVal() {
+    private HttpReqService<GoldStatus>? _enFetcher;
+    private HttpReqService<GoldStatus>? _zhFetcher;
+    public async Task GetVal(Action<GoldStatus> successCallback) {
+        _enFetcher = CreateFetcher(nameof(GoldProperty.Currency.USD), GoldProperty.Locale.EN);
+        _zhFetcher = CreateFetcher(nameof(GoldProperty.Currency.CNY), GoldProperty.Locale.ZH);
+        await Task.WhenAll(
+            _enFetcher.AutoFetch(Timeout),
+            _zhFetcher.AutoFetch(Timeout)
+        );
+        return;
+        
         string OzToGram(string str) {
-            decimal num;
-            return decimal.TryParse(str, out num) ? (num / 31.1035m).ToString("F2") : str;
+            return decimal.TryParse(str, out var num) ? (num / 31.1035m).ToString("F2") : str;
         }
 
         string Fix2(string str) {
-            if (decimal.TryParse(str, out var number))
-                // 格式化为最多两位小数
-                return number.ToString("F2");
-
-            return "NaN";
+            // 格式化为最多两位小数
+            return decimal.TryParse(str, out var number) ? number.ToString("F2") : "NaN";
         }
 
-        string Parse(string raw) {
+        GoldStatus Parse(string raw, GoldProperty.Locale locale) {
+            Console.WriteLine($"Request result in {nameof(locale)}");
+            Console.WriteLine(raw);
+            Console.WriteLine();
             try {
                 /*
                  {
@@ -64,26 +47,33 @@ public class GoldPriceService {
                 using var doc = JsonDocument.Parse(raw);
                 var root = doc.RootElement;
                 var items = root.GetProperty("items");
-                if (items.GetArrayLength() > 0) {
-                    var pricePerOz = items[0].GetProperty("xauPrice").ToString();
-                    var changeRate = items[0].GetProperty("pcXau").ToString();
-                    var priceRes = _currUnit == GoldProperty.Unit.G ? OzToGram(pricePerOz) : pricePerOz;
-                    _onPriceChange(Fix2(priceRes));
-                    _onRateChange(Fix2(changeRate));
-                    return priceRes;
+                if (items.GetArrayLength() == 0) {
+                    return new GoldStatus(price: "", rate: "", locale: locale);
                 }
+                var pricePerOz = items[0].GetProperty("xauPrice").ToString();
+                var changeRate = items[0].GetProperty("pcXau").ToString();
+                var priceRes = locale == GoldProperty.Locale.ZH ? OzToGram(pricePerOz) : pricePerOz;
+                return new GoldStatus(price: Fix2(priceRes), rate: Fix2(changeRate), locale: locale);
 
-                return "NaN";
             } catch (Exception e) {
                 Console.WriteLine($"GoldPrice Parse Error: {e.Message}");
-                return "NaN";
+                return new GoldStatus(price: "", rate: "", locale: locale);
             }
         }
+        HttpReqService<GoldStatus> CreateFetcher(string currency, GoldProperty.Locale locale)
+            => new HttpReqService<GoldStatus>(
+                url: $"https://data-asg.goldprice.org/dbXRates/{currency}",
+                parser: str => Parse(str, locale),
+                successCallback: (res => {
+                    if (res.Locale == GoldProperty.Locale.EN) {
+                        CurrentPrice.EnRecord = res;
+                    } else {
+                        CurrentPrice.ZhRecord = res; 
+                    }
 
-        _fetcher = new HttpReqService(
-            $"https://data-asg.goldprice.org/dbXRates/{_currCurrency.ToString()}",
-            parser: Parse
-        );
-        await _fetcher.AutoFetch(Timeout);
+                    successCallback(res);
+                })
+            );
+        
     }
 }

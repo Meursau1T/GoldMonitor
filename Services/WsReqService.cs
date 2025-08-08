@@ -4,13 +4,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GoldMonitor.Models;
+namespace GoldMonitor.Services;
 
-public class WsReqService : WebReqService {
+public class WsReqService<T> : WebReqService<T> {
     public WsReqService(string url,
-        Action<string>? successCallback = null,
-        Func<string, string>? parser = null,
-        Func<string, bool>? checker = null) : base(url, successCallback, parser, checker) {
+        Action<T>? successCallback = null,
+        Func<string, T>? parser = null,
+        Func<T, bool>? checker = null) : base(url, successCallback, parser, checker) {
     }
 
     private async Task ReceiveMessages(ClientWebSocket webSocket) {

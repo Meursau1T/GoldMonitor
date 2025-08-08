@@ -2,17 +2,17 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace GoldMonitor.Models;
+namespace GoldMonitor.Services;
 
-public class HttpReqService : WebReqService {
+public class HttpReqService<T> : WebReqService<T> {
     private bool _isAutoFetchCanceled;
     private readonly Action<HttpClient>? ConfigHttpClient;
 
     public HttpReqService(
         string url,
-        Action<string>? successCallback = null,
-        Func<string, string>? parser = null,
-        Func<string, bool>? checker = null,
+        Action<T>? successCallback = null,
+        Func<string, T>? parser = null,
+        Func<T, bool>? checker = null,
         Action<HttpClient>? configHttpClient = null) : base(url, successCallback, parser, checker) {
         ConfigHttpClient = configHttpClient ?? (client => { });
     }

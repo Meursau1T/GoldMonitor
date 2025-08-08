@@ -1,21 +1,21 @@
 ﻿using System;
 
-namespace GoldMonitor.Models;
+namespace GoldMonitor.Services;
 
-public class WebReqService {
-    protected readonly Func<string, bool> Checker;
-    protected readonly Func<string, string> Parser;
-    protected readonly Action<string> SuccessCallback;
+public class WebReqService<T> {
+    protected readonly Func<T, bool> Checker;
+    protected readonly Func<string, T> Parser;
+    protected readonly Action<T> SuccessCallback;
 
     protected WebReqService(
         string url,
-        Action<string>? successCallback = null,
-        Func<string, string>? parser = null,
-        Func<string, bool>? checker = null) {
+        Action<T>? successCallback = null,
+        Func<string, T>? parser = null,
+        Func<T, bool>? checker = null) {
         Url = url;
         SuccessCallback = successCallback ?? (str => { });
-        Checker = checker ?? (str => true);
-        Parser = parser ?? (str => str);
+        Checker = checker ?? (str => throw new ArgumentNullException(nameof(checker)));
+        Parser = parser ?? (str => throw new ArgumentNullException(nameof(parser)));
     }
 
     protected string Url { get; init; }

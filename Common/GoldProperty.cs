@@ -1,6 +1,6 @@
 ﻿namespace GoldMonitor.Common;
 
-public class GoldProperty {
+public static class GoldProperty {
     
     public enum Currency {
         CNY,
