@@ -31,7 +31,7 @@ public class GoldPriceService {
         }
 
         GoldStatus Parse(string raw, GoldProperty.Locale locale) {
-            Console.WriteLine($"Request result in {nameof(locale)}");
+            Console.WriteLine($"Request result:");
             Console.WriteLine(raw);
             Console.WriteLine();
             try {

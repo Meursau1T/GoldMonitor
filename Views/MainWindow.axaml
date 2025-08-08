@@ -11,8 +11,10 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="GoldMonitor"
-        Width="300"
-        Height="200"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        Width="200"
+        Height="20"
         CanResize="False"
         SystemDecorations="None"
         ExtendClientAreaToDecorationsHint="True"
@@ -63,22 +65,22 @@
             PointerPressed="Close_PointerPressed" />
 
         <!-- 主内容区域：居中显示 -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+        <StackPanel Grid.Row="0" Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Spacing="20">
 
             <!-- 垂直排列的两个 TextBlock -->
-            <StackPanel Spacing="5" HorizontalAlignment="Center">
+            <StackPanel Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                 <TextBlock Text="{Binding Price}"
                            FontWeight="Bold"
-                           FontSize="48"
+                           FontSize="14"
                            HorizontalAlignment="Center" />
 
                 <TextBlock Text="{Binding Rate}"
                            Foreground="{Binding Rate, Converter={StaticResource TextToBrushConverter}}"
                            FontWeight="Bold"
-                           FontSize="16"
+                           FontSize="14"
                            HorizontalAlignment="Center" />
             </StackPanel>
         </StackPanel>
