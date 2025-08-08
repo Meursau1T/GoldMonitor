@@ -1,39 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reactive;
 using GoldMonitor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace GoldMonitor.ViewModels;
 
-public class MainWindowViewModel : INotifyPropertyChanged {
-    private string _price = "0";
-    public string Price {
-        get => _price;
-        set {
-            _price = value;
-            OnPropertyChanged(nameof(Price));
-        }
-    }
-    private string _rate = "0";
-    public string Rate {
-        get => _rate;
-        set {
-            _rate = value;
-            OnPropertyChanged(nameof(Rate));
-        }
-    }
+public class MainWindowViewModel : ReactiveObject {
+    [Reactive]
+    public string Price { get; set; } = "";
+    [Reactive]
+    public string Rate { get; set; } = "";
+    [Reactive]
+    public string Locale { get; set; } = "CN";
 
-    private string _locale = "CN";
-
-    public string Locale {
-        get => _locale;
-        set {
-            _locale = value;
-            OnPropertyChanged(nameof(Locale));
-        }
-    }
     private GoldPrice _goldPrice;
 
     public MainWindowViewModel() {
+        LocalePressed = ReactiveCommand.Create(ChangeCurrency);
         _goldPrice = new GoldPrice(
             onPriceChange: (str) => Price = str,
             onRateChange: (str) => Rate = str + "%"
@@ -41,7 +26,9 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         _goldPrice.GetVal();
     }
 
-    public void ChangeCurrency() {
+    /* 区域点击事件 */
+    public ReactiveCommand<Unit, Unit> LocalePressed { get; set; }
+    private void ChangeCurrency() {
         if (Locale != "EN") { 
             _goldPrice.UpdateLocale(GoldPrice.Currency.USD, GoldPrice.Unit.OZ);
             Locale = "EN";
@@ -49,12 +36,5 @@ public class MainWindowViewModel : INotifyPropertyChanged {
             _goldPrice.UpdateLocale(GoldPrice.Currency.CNY, GoldPrice.Unit.G);
             Locale = "CN";
         }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

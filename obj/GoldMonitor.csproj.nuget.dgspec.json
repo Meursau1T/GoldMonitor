@@ -69,9 +69,17 @@
               "target": "Package",
               "version": "[11.3.3, )"
             },
+            "Avalonia.ReactiveUI": {
+              "target": "Package",
+              "version": "[11.3.3, )"
+            },
             "Avalonia.Themes.Fluent": {
               "target": "Package",
               "version": "[11.3.3, )"
+            },
+            "Avalonia.Xaml.Interactions": {
+              "target": "Package",
+              "version": "[11.3.0.6, )"
             },
             "CommunityToolkit.Mvvm": {
               "target": "Package",
@@ -80,6 +88,10 @@
             "HtmlAgilityPack": {
               "target": "Package",
               "version": "[1.12.2, )"
+            },
+            "ReactiveUI.Fody": {
+              "target": "Package",
+              "version": "[19.5.41, )"
             }
           },
           "imports": [

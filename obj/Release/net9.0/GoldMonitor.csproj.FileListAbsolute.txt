@@ -70,3 +70,13 @@ C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\refint\GoldMonitor.dll
 C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\GoldMonitor.pdb
 C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\GoldMonitor.genruntimeconfig.cache
 C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\ref\GoldMonitor.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\Avalonia.ReactiveUI.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\DynamicData.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\ReactiveUI.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\ReactiveUI.Fody.Helpers.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\Splat.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\System.Reactive.dll
+C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\GoldMonitor.csproj.Fody.CopyLocal.cache
+C:\Users\Nagato\Sources\GoldMonitor\obj\Release\net9.0\GoldMonitor.csproj.Fody.RuntimeCopyLocal.cache
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\Avalonia.Xaml.Interactions.dll
+C:\Users\Nagato\Sources\GoldMonitor\bin\Release\net9.0\Avalonia.Xaml.Interactivity.dll
