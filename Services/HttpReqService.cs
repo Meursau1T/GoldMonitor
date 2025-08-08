@@ -6,7 +6,7 @@ namespace GoldMonitor.Services;
 
 public class HttpReqService<T> : WebReqService<T> {
     private bool _isAutoFetchCanceled;
-    private readonly Action<HttpClient>? ConfigHttpClient;
+    private readonly Action<HttpClient>? _configHttpClient;
 
     public HttpReqService(
         string url,
@@ -14,13 +14,13 @@ public class HttpReqService<T> : WebReqService<T> {
         Func<string, T>? parser = null,
         Func<T, bool>? checker = null,
         Action<HttpClient>? configHttpClient = null) : base(url, successCallback, parser, checker) {
-        ConfigHttpClient = configHttpClient ?? (client => { });
+        _configHttpClient = configHttpClient ?? (client => { });
     }
 
     public async Task Fetch() {
         using var httpClient = new HttpClient();
         var requestUri = new Uri(Url);
-        ConfigHttpClient?.Invoke(httpClient);
+        _configHttpClient?.Invoke(httpClient);
         // 设置自定义请求头
 
         try {

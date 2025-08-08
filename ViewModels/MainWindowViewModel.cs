@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reactive;
-using System.Threading.Tasks;
+﻿using System.Reactive;
 using GoldMonitor.Common;
 using GoldMonitor.Models;
 using GoldMonitor.Services;
@@ -12,7 +10,7 @@ namespace GoldMonitor.ViewModels;
 public class MainWindowViewModel : ReactiveObject {
     public MainWindowViewModel() {
         LocalePressed = ReactiveCommand.Create(ChangeCurrency);
-        (new GoldPriceService()).GetVal(OnSuccess);
+        new GoldPriceService().GetVal(OnSuccess);
     }
     [Reactive] public string Price { get; set; } = "Loading";
     [Reactive] public string Rate { get; set; } = "Loading";

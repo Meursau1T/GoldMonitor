@@ -7,11 +7,6 @@ public static class GoldProperty {
         USD
     }
 
-    public enum Unit {
-        OZ,
-        G
-    }
-
     public enum Locale {
         EN,
         ZH

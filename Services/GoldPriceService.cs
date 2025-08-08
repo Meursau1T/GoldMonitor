@@ -6,7 +6,7 @@ using GoldMonitor.Models;
 
 namespace GoldMonitor.Services;
 
-public class GoldPriceService() {
+public class GoldPriceService {
 
     private const int Timeout = 5;
 
@@ -61,10 +61,10 @@ public class GoldPriceService() {
             }
         }
         HttpReqService<GoldStatus> CreateFetcher(string currency, GoldProperty.Locale locale)
-            => new HttpReqService<GoldStatus>(
+            => new (
                 url: $"https://data-asg.goldprice.org/dbXRates/{currency}",
                 parser: str => Parse(str, locale),
-                successCallback: (res => {
+                successCallback: res => {
                     if (res.Locale == GoldProperty.Locale.EN) {
                         CurrentPrice.EnRecord = res;
                     } else {
@@ -72,7 +72,7 @@ public class GoldPriceService() {
                     }
 
                     successCallback(res);
-                })
+                }
             );
         
     }
