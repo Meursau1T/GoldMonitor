@@ -11,5 +11,5 @@ MyAvaloniaApp/
 ├── App.axaml               # 应用入口 XAML
 ├── App.axaml.cs            # 应用启动逻辑
 ├── Program.cs              # 主程序入口（Avalonia 11+ 推荐）
-└── Helpers/ 或 Utilities/  # 工具类（命令、转换器、扩展方法等）
+└── Common/                 # 工具类、通用枚举等内容
 ```

@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using GoldMonitor.Common;
 using GoldMonitor.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -21,18 +22,18 @@ public class MainWindowViewModel : ReactiveObject {
 
     [Reactive] public string Rate { get; set; } = "Loading";
 
-    [Reactive] public string Locale { get; set; } = "CN";
+    [Reactive] public GoldProperty.Locale Locale { get; set; } = GoldProperty.Locale.ZH;
 
     /* 区域点击事件 */
     public ReactiveCommand<Unit, Unit> LocalePressed { get; set; }
 
     private void ChangeCurrency() {
-        if (Locale != "EN") {
-            _goldPriceService.UpdateLocale(GoldPriceService.Currency.USD, GoldPriceService.Unit.OZ);
-            Locale = "EN";
+        if (Locale != GoldProperty.Locale.EN) {
+            _goldPriceService.UpdateLocale(GoldProperty.Currency.USD, GoldProperty.Unit.OZ);
+            Locale = GoldProperty.Locale.EN;
         } else {
-            _goldPriceService.UpdateLocale(GoldPriceService.Currency.CNY, GoldPriceService.Unit.G);
-            Locale = "CN";
+            _goldPriceService.UpdateLocale(GoldProperty.Currency.CNY, GoldProperty.Unit.G);
+            Locale = GoldProperty.Locale.ZH;
         }
     }
 }
