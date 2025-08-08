@@ -46,7 +46,7 @@
 
             <!-- List of existing alerts -->
             <ItemsControl ItemsSource="{Binding Alerts}">
-                <ItemsControl.DataTemplates>
+                <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:AlertItemViewModel">
                         <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" RowDefinitions="Auto"
                               Margin="0,2">
@@ -75,7 +75,7 @@
                                     Background="Transparent" />
                         </Grid>
                     </DataTemplate>
-                </ItemsControl.DataTemplates>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
 
             <!-- Add New Row -->
@@ -91,11 +91,11 @@
                           ItemsSource="{Binding ComparisonOptions}"
                           SelectedItem="{Binding NewComparison}"
                           Width="60">
-                    <ComboBox.DataTemplates>
+                    <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding  ., Converter={StaticResource ComparisonConverter}}"/>
                         </DataTemplate>
-                    </ComboBox.DataTemplates>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <!-- Locale Dropdown -->
@@ -103,11 +103,11 @@
                           ItemsSource="{Binding LocaleOptions}"
                           SelectedItem="{Binding NewLocale}"
                           Width="60">
-                    <ComboBox.DataTemplates>
+                    <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ., Converter={StaticResource LocaleConverter}}" />
                         </DataTemplate>
-                    </ComboBox.DataTemplates>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <!-- Add Button (Plus Icon) -->
