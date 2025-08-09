@@ -2,6 +2,7 @@
 using Avalonia.Logging;
 using System;
 using System.Text;
+using Avalonia.ReactiveUI;
 
 namespace GoldMonitor;
 
@@ -23,5 +24,6 @@ sealed class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace(LogEventLevel.Verbose);
+            .LogToTrace(LogEventLevel.Verbose)
+            .UseReactiveUI();
 }
